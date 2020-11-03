@@ -31,7 +31,7 @@ def plot(sum_reward, label):
         ax1.plot(range(steps), sum_reward[i], label=label[i])
     ax1.legend() 
     ax1.set_xlabel("Episode")
-    ax1.set_ylabel("Sum of rewards during episode")
+    ax1.set_ylabel("episode return")
     ax1.grid('k', ls='--', alpha=0.3)
 
     plt.show()

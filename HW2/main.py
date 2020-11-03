@@ -53,11 +53,13 @@ if __name__ == '__main__':
     plot(np.expand_dims(epi_reward, axis=0), [args.algo])
 
     # if you want to render the result...
+
     if args.render:
         render_trajectory(env, Q)
 
+
     # Un-comment this part if you finish all algorithm
-    """    
+
     if args.runAll:
         # run all the algorithms
         label = ['q_learning', 'sarsa']
@@ -68,5 +70,15 @@ if __name__ == '__main__':
             Q, epi_reward, epi_length = ALGO_MAP[alg](env, args.episode)
             _gather_r[idx] = epi_reward
             _gather_l[idx] = epi_length
-        plot(_gather_r, ['Q-learning', 'SARSA'])
-    """
+        plot(_gather_l, ['Q-learning', 'SARSA'])
+
+def vary_alpha():
+    alpha_list = [0.1,0.5,0.9]
+    _gather_r = np.zeros([len(alpha_list), args.episode])
+    for idx,alpha in enumerate(alpha_list):
+        Q, epi_reward, epi_length =sarsa(env,args.episode,alpha=alpha)
+        _gather_r[idx] = epi_reward
+        plot(_gather_r, ['0.1', '0.5','0.9'])
+
+vary_alpha()
+

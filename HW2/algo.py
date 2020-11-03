@@ -49,14 +49,27 @@ def q_learning(env, num_episodes, discount_factor=1.0, alpha=0.5, epsilon=0.1):
     for i_episode in range(num_episodes):
         # Reset the environment and pick the first action
         state = env.reset()
+        action_probs = policy(state)
+        action = np.random.choice(np.arange(len(action_probs)), p=action_probs)
 
         for t in itertools.count():
-            raise NotImplementedError('Q-learning NOT IMPLEMENTED')
+            # raise NotImplementedError('Q-learning NOT IMPLEMENTED')
             ##############################################################################
             #                                                                            #
             #                               Your code here                               #
             #                                                                            #
             ##############################################################################
+            state_, reward, done, prob = env.step(action)
+            Q[state][action] = Q[state][action] + alpha * (
+                        reward + discount_factor * np.max(Q[state_]) - Q[state][action])
+
+            state = state_
+            action_probs = policy(state)
+            action = np.random.choice(np.arange(len(action_probs)), p=action_probs)
+            episode_rewards[i_episode] += reward
+            episode_lengths[i_episode] += 1
+            if done: break
+
     
     return Q, episode_rewards, episode_lengths
 
@@ -93,11 +106,23 @@ def sarsa(env, num_episodes, discount_factor=1.0, alpha=0.5, epsilon=0.1):
         action = np.random.choice(np.arange(len(action_probs)), p=action_probs)
 
         for t in itertools.count():
-            raise NotImplementedError('SARSA NOT IMPLEMENTED')
+            # raise NotImplementedError('SARSA NOT IMPLEMENTED')
             ##############################################################################
             #                                                                            #
             #                               Your code here                               #
             #                                                                            #
             ##############################################################################
+            state_, reward, done, prob = env.step(action)
+            action_probs_ = policy(state_)
+            action_ = np.random.choice(np.arange(len(action_probs_)), p=action_probs_)
+            Q[state][action] = Q[state][action] + alpha*(reward + discount_factor*Q[state_][action_]-Q[state][action])
+            state = state_
+            action = action_
+            episode_rewards[i_episode] += reward
+            episode_lengths[i_episode] += 1
+            if done: break
+
+
+
 
     return Q, episode_rewards, episode_lengths
